@@ -5,7 +5,7 @@
 	#Codigo em assembly do jogo da cesta
 	
 	Inicio: #Configurar o display bitmap como 16,16,512,512 e base dos pixels em $gp
-		#Cada pixel ocupa 4bytes sendo necessario ent„o iterar a posicao de 4 em quatro bytes
+		#Cada pixel ocupa 4bytes sendo necessario ent√£o iterar a posicao de 4 em quatro bytes
 		#Uma linha possui 124 bytes ou seja 32 pixels		
 		
 				
@@ -116,7 +116,7 @@
 		iteracao2:
 		addi $t0,$t0,1
 		slt $t2,$t0,$t1
-		beq $t2,$zero,finaliza
+		beq $t2,$zero,finaliza_rodajogo
 		sll $t2,$t0,2
 		add $t2,$t2,$s3
 		lw  $t2,0($t2)
@@ -128,7 +128,9 @@
 		lw $t2,0($t3)
 		addi $t2,$t2,128
 		sw $t2,0($t3)
+		j iteracao2
 		
+		finaliza_rodajogo:
 		jal Pintar_tela_preta
 		jal Pintar_jogo
 		j Rodar_jogo
@@ -141,5 +143,3 @@
 	buffer_pos: .space 40  #Buffer 1 contem a string a ser criptografada
 	buffer_cor: .space 40 #Buffer 2 ira conter a string ja criptografada
 	buffer_estado: .space 40
-
-	
