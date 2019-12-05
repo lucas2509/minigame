@@ -1,11 +1,18 @@
 .text
 	.globl Inicio
 	
-	Inicio: #display em 4,2,512,512	
+	Inicio: #display em 4,2,512,512		
+		
 		li $s2,0x223399 ## Cor de fundo
 		jal Apagar_tela
 		
-		li $v0,100000
+		
+		
+		li $t0,100000
+		la $t1,posicao_cesta
+		sw $t0,0($t1)
+		
+		li $v1,1
 		jal Pintar_boneca
 			
 		li $t0,0
@@ -38,10 +45,16 @@
 		addi $sp,$sp,-8
 		sw $t0,0($sp)
 		sw $t1,4($sp)
+		
+		jal Controle_teclado
+		li $v1,1
+		jal Pintar_boneca
+		
 		jal Apagar_figuras
 		jal Mover_figuras
 		jal Pintar_tela
 		jal Confronto_chao
+		
 		lw $t0,0($sp)
 		lw $t1,4($sp)
 		addi $sp,$sp,8
@@ -72,6 +85,48 @@
 		fim_ini_vetestado:
 		jr $ra
 	#######################################
+	Controle_teclado:
+		addi $sp,$sp,-4	
+		sw $ra,0($sp)
+		
+		la $t0,0xffff0004		
+		lw $t2,0($t0)
+		li $t0,97
+		
+		
+		
+		bne $t0,$t2,cont1_controle
+		li $v1,0
+		jal Pintar_boneca
+		la $t0,posicao_cesta
+		lw $t1,0($t0)
+		addi $t1,$t1,-4
+		sw $t1,0($t0)
+		
+		li $t0,0xffff0004
+		li $t1,0
+		sw $t1,0($t0)	
+						
+		cont1_controle:
+		li $t0,100
+		bne $t0,$t2,cont2_controle
+		li $v1,0
+		jal Pintar_boneca
+		la $t0,posicao_cesta
+		lw $t1,0($t0)
+		addi $t1,$t1,4
+		sw $t1,0($t0)
+		
+		li $t0,0xffff0004
+		li $t1,0
+		sw $t1,0($t0)
+		
+		cont2_controle:
+		
+		lw $ra,0($sp)
+		addi $sp,$sp,4
+		jr $ra
+		
 	Confronto_chao:
 		addi $sp,$sp,-4
 		sw $ra,0($sp)
@@ -1887,29 +1942,52 @@
 		
 		
 
+	beq $v1,$zero,apagar_boneca
+	li $t0,0xff0000 #vermelho  
+	li $t1,0xB8860B #marrom  
+	li $s4,0x83350C #marrom médio  
+	li $s4,0x4F1D02 #marrom muito escuro  
+	li $t2,0x008000 #verde  
+	li $t3,0x006400 #verde escuro  
+	li $t4,0x90EE90 #verde claro 
+	li $t5,0xFFFAFA #gelo 
+	li $t6,0xffff00	#amarelo
+	li $t7,0x000000 #preto	
+	li $t8,0x595959 #cinza	
+	li $t9,0xffaa00 #laranja
+	li $s1,0x86592d #marrom escuro
+	li $s2,0xFFF8DC #pele
+	li $s3,0xD2691E #cabelo
+	li $s6,0x11D8F8 #azul olhos
+	li $s7,0xF8D1E8 #nariz pink
+	li $a0,0x000000 #branco
+	j cont1_pintar_boneca
+	
+	apagar_boneca:	
+	move $t0,$s2
+	move $t1,$s2
+	move $s4,$s2
+	move $s4,$s2
+	move $t2,$s2
+	move $t3,$s2
+	move $t4,$s2
+	move $t5,$s2
+	move $t6,$s2
+	move $t7,$s2 #preto	
+	move $t8,$s2
+	move $t9,$s2
+	move $s1,$s2
+	move $s2,$s2
+	move $s3,$s2
+	move $s6,$s2
+	move $s7,$s2
+	move $a0,$s2 
+	move $s5,$s2
 
-		li $t0,0xff0000 #vermelho  
-		li $t1,0xB8860B #marrom  
-		li $s4,0x83350C #marrom médio  
-		li $s4,0x4F1D02 #marrom muito escuro  
-		li $t2,0x008000 #verde  
-		li $t3,0x006400 #verde escuro  
-		li $t4,0x90EE90 #verde claro 
-		li $t5,0xFFFAFA #gelo 
-		li $t6,0xffff00	#amarelo
-		li $t7,0x000000 #preto	
-		li $t8,0x595959 #cinza	
-		li $t9,0xffaa00 #laranja
-		li $s1,0x86592d #marrom escuro
-		li $s2,0xFFF8DC #pele
-		li $s3,0xD2691E #cabelo
-		li $s6,0x11D8F8 #azul olhos
-		li $s7,0xF8D1E8 #nariz pink
-		li $a0,0x000000 #branco
-		
-		
-#maça		
-	add $s0,$gp,$v0 #Atribui ao registrador $s0 o endereco do pixel central da maca
+	cont1_pintar_boneca:
+	la $s0,posicao_cesta
+	lw $s0,0($s0)	
+	add $s0,$gp,$s0 #Atribui ao registrador $s0 o endereco do pixel central da maca
 	addi $s0,$s0,-6168
 	
 
@@ -2955,8 +3033,10 @@
 	espaco_display: .space 99232
 	vetor_pos: .space 40
 	vetor_estado: .space 40
+	posicao_cesta: .space 4
 	teste: .asciiz "dfaijdfoaij"
 	prompt2: .asciiz " "
 	prompt3: .asciiz " O vetor de posicao esta na seguinte configuracao: "
 	prompt1: .asciiz "O vetor de estado esta na seguinte configuracao: "
 	passou: .asciiz " Passou aqui... "
+
