@@ -1,21 +1,32 @@
 .text
 	.globl Inicio
 	
-	Inicio: #display em 4,2,512,512		
-		li $v0,80000
-		li $v1,1
-		jal Adicionar_frutas
-		
+	Inicio: #display em 4,2,512,512	
 		li $t0,0
 		li $t1,1000
 		
 		loop_inicio:
 		slt $t2,$t0,$t1
 		beq $t2,$zero,fim_loop_inicio
-		li $a0,10
+		
+		li $a0,25
 		li $v0,32
 		syscall
 		
+		li $t3,100
+		div $t0,$t3
+		li $t3,1
+		mfhi $t4
+		bne $t3,$t4,cont1_inicio
+		addi $sp,$sp,-8
+		sw $t0,0($sp)
+		sw $t1,4($sp)
+		jal Adicionar_fruta_aleatoria
+		lw $t0,0($sp)
+		lw $t1,4($sp)
+		addi $sp,$sp,8
+			
+		cont1_inicio:		
 		addi $sp,$sp,-8
 		sw $t0,0($sp)
 		sw $t1,4($sp)
@@ -54,6 +65,9 @@
 		jr $ra
 	#######################################
 	Confronto_chao:
+		addi $sp,$sp,-4
+		sw $ra,0($sp)
+		
 		li $t0,0
 		li $t1,10
 		la $t2,vetor_estado
@@ -83,6 +97,27 @@
 		j loop_confronto
 		fim_loop_confronto:
 		
+		
+		lw $ra,0($sp)
+		addi $sp,$sp,4
+		jr $ra
+	########################################
+	Adicionar_fruta_aleatoria:
+		addi $sp,$sp,-4
+		sw $ra,0($sp)
+		
+		li $a1,116
+		li $v0,42
+		syscall
+		addi $a0,$a0,4
+		mul $a0,$a0,4
+		move $v0,$a0
+		li $v1,1		
+		jal Adicionar_frutas
+		
+		
+		lw $ra,0($sp)
+		addi $sp,$sp,4
 		jr $ra
 	########################################
 	Mover_figuras:
@@ -543,6 +578,7 @@
 	lw $t7,28($sp)
 	addi $sp,$sp,32        
         jr $ra
+        
 	.data
 	espaco_display: .space 99232
 	vetor_pos: .space 40
