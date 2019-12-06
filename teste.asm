@@ -1114,102 +1114,23 @@
 	##############################################
         #### Pintar Cereja #########
         Pintar_cereja:     
-	addi $sp,$sp,-32
-	sw $t0,0($sp)
-	sw $t1,4($sp)
-	sw $t2,8($sp)
-	sw $t3,12($sp)
-	sw $t4,16($sp)
-	sw $t5,20($sp)
-	sw $t6,24($sp)
-	sw $t7,28($sp)
 	
 	li $t0,0xff0000 #vermelho  
-	li $t1,0xB8860B #marrom  
-	li $t2,0x008000 #verde  
-	li $t3,0x006400 #verde escuro  
-	li $t4,0x90EE90 #verde claro 
-	li $t5,0xFFFAFA #gelo 
-	li $t6,0xffff00	#amarelo
-	li $t7,0x000000 #preto	
-	li $t8,0x595959 #cinza	
-	li $t9,0xffaa00 #laranja
-	li $s1,0x86592d #marrom escuro
+	li $t1,0xB8860B #marrom  	
 				
 	add $s0,$gp,$v0 #Atribui ao registrador $s0 o endereco do pixel central da cereja
 	
 	sw $t0,-2576($s0)
         sw $t0,-2572($s0)
-        sw $t0,-2064($s0)
-        sw $t0,-2060($s0)
-        sw $t0,-1552($s0)
-        sw $t0,-1548($s0)
-        sw $t0,-1040($s0)
-        sw $t0,-1036($s0)
-        sw $t0,-528($s0)
-        sw $t0,-524($s0)
-        sw $t0,-16($s0)
-        sw $t0,-12($s0)
-        sw $t0,-2056($s0)
-        sw $t0,-1544($s0)
-        sw $t0,-1032($s0)
-        sw $t0,-520($s0)
-        sw $t0,-1540($s0)
-        sw $t0,-1028($s0)
-        sw $t0,-2068($s0)
-        sw $t0,-1556($s0)
-        sw $t0,-1044($s0)
-        sw $t0,-532($s0)
-        sw $t0,-1560($s0)
-        sw $t0,-1048($s0)
-        sw $t0,-1528($s0)
-        sw $t0,-1016($s0)
-        sw $t0,-2036($s0)
-        sw $t0,-1524($s0)
-        sw $t0,-1012($s0)
-        sw $t0,-500($s0)
-        sw $t0,-2544($s0)
-        sw $t0,-2540($s0)
-        sw $t0,-2032($s0)
-        sw $t0,-2028($s0)
-        sw $t0,-1520($s0)
-        sw $t0,-1516($s0)
-        sw $t0,-1008($s0)
-        sw $t0,-1004($s0)
-        sw $t0,-496($s0)
-        sw $t0,-492($s0)
-        sw $t0,16($s0)
-        sw $t0,20($s0)
-        sw $t0,-2024($s0)
-        sw $t0,-1512($s0)
-        sw $t0,-1000($s0)
-        sw $t0,-488($s0)
-        sw $t0,-1508($s0)
-        sw $t0,-996($s0)
-
-
-        sw $t1,-5120($s0)
-        sw $t1,-5116($s0)
-        sw $t1,-4612($s0)
-        sw $t1,-4600($s0)
-        sw $t1,-4104($s0)
-        sw $t1,-4084($s0)
-        sw $t1,-3596($s0)
-        sw $t1,-3568($s0)
+        .
+	.
+	.
         sw $t1,-3088($s0)
         sw $t1,-3052($s0)
-
-	lw $t0,0($sp)
-	lw $t1,4($sp)
-	lw $t2,8($sp)
-	lw $t3,12($sp)
-	lw $t4,16($sp)
-	lw $t5,20($sp)
-	lw $t6,24($sp)
-	lw $t7,28($sp)
-	addi $sp,$sp,32
+	
 	jr $ra
-	################################################
+	
+	#############################
 	#### Apagar Cereja #########
         Apagar_cereja:     
 	addi $sp,$sp,-32
