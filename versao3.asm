@@ -1,28 +1,30 @@
+
 .text
 	.globl Inicio
 	
 	Inicio: #display em 4,2,512,512		
 		
 		li $s2,0x223399 ## Cor de fundo
-		jal Apagar_tela
+		jal Apagar_tela		
 		
+		li $s3,3 #quantidade de vidas
+		li $s4,25 #Velocidade do jogo
 		
-		
-		
-		li $k0,100000
-		
+		li $k0,100100
 		li $v1,1
 		jal Pintar_boneca
+		
+
 			
 		li $t0,0
-		li $t1,2000
+		li $t1,1000
 		
 		
 		loop_inicio:
 		slt $t2,$t0,$t1
 		beq $t2,$zero,fim_loop_inicio
 		
-		li $a0,25
+		move $a0,$s4
 		li $v0,32
 		syscall
 		
@@ -48,7 +50,7 @@
 		jal Controle_teclado
 		li $v1,1
 		jal Pintar_boneca
-		
+		jal Confronto_cesta
 		jal Apagar_figuras
 		jal Mover_figuras
 		jal Pintar_tela
@@ -60,7 +62,10 @@
 		
 		addi $t0,$t0,1
 		j loop_inicio
-		fim_loop_inicio:	
+		
+		fim_loop_inicio:
+		li $t0,0
+		j loop_inicio	
 		
 		
 		addi $v0,$zero,10 
@@ -84,6 +89,17 @@
 		fim_ini_vetestado:
 		jr $ra
 	#######################################
+	######## Funcao Perdeu !!! ###########
+	Perdeu:
+		subi $s3,$s3,1
+		bne $s3,$zero,fim_perdeu
+		
+		addi $v0,$zero,10 
+		syscall
+		
+		fim_perdeu:
+		jr $ra
+	######################################	
 	Controle_teclado:
 		addi $sp,$sp,-4	
 		sw $ra,0($sp)
@@ -96,8 +112,7 @@
 		
 		bne $t0,$t2,cont1_controle
 		li $v1,0
-		jal Pintar_boneca
-		la $t0,posicao_cesta		
+		jal Pintar_boneca		
 		addi $k0,$k0,-8
 		
 		
@@ -120,6 +135,59 @@
 		
 		lw $ra,0($sp)
 		addi $sp,$sp,4
+		jr $ra
+		
+	Confronto_cesta:
+		li $t0,0
+		li $t1,10		
+		la $t2,vetor_estado
+		la $t3,vetor_pos
+		li $t5,116736
+		
+		
+		loop_confcesta:
+		slt $t4,$t0,$t1
+		beq $t4,$zero,fim_loop_confcesta
+		lw $t4,0($t2)
+		beq $t4,$zero,cont1_loop_confcesta
+		lw $t4,0($t3)
+		slt $t6,$t5,$t4
+		beq $t6,$zero,cont1_loop_confcesta
+		
+		li $t6,512
+		div $t4,$t6
+		mfhi $t4		
+		div $k0,$t6
+		mfhi $t6
+		
+		slt $t7,$t4,$t6
+		beq $t7,$zero,t4_maior
+		sub $t4,$t6,$t4
+		j cont_maior
+		t4_maior:
+		sub $t4,$t4,$t6
+		cont_maior:
+		
+		li $t6,60
+		slt $t6,$t4,$t6
+		beq $t6,$zero,cont1_loop_confcesta		
+		
+		lw $t4,0($t2)
+		li $t6,4
+		bne $t4,$t6,cont2_loop_confcesta
+		jal Perdeu
+		cont2_loop_confcesta:
+		li $t4,0
+		sw $t4,0($t2)
+		subi $s4,$s4,2
+		
+		cont1_loop_confcesta:
+		addi $t0,$t0,1
+		addi $t2,$t2,4
+		addi $t3,$t3,4
+		j loop_confcesta
+		fim_loop_confcesta:
+		
 		jr $ra
 		
 	Confronto_chao:
@@ -146,7 +214,8 @@
 		li $t6,0
 		sw $t6,0($t2)
 		move $v0,$t5
-		jal Apagar_maca		
+		jal Apagar_maca
+		jal Perdeu	
 		
 		cont1_loop_confronto:
 		li $t6,2
@@ -158,6 +227,7 @@
 		sw $t6,0($t2)
 		move $v0,$t5
 		jal Apagar_banana
+		jal Perdeu
 		
 		cont2_loop_confronto:
 		li $t6,3
@@ -169,6 +239,7 @@
 		sw $t6,0($t2)
 		move $v0,$t5
 		jal Apagar_cereja
+		jal Perdeu
 		
 		cont3_loop_confronto:
 		li $t6,4
@@ -191,6 +262,7 @@
 		sw $t6,0($t2)
 		move $v0,$t5
 		jal Apagar_moeda
+		jal Perdeu
 		
 		cont5_loop_confronto:																
 		addi $t0,$t0,1
@@ -3029,10 +3101,3 @@
 	espaco_display: .space 99232
 	vetor_pos: .space 40
 	vetor_estado: .space 40
-	posicao_cesta: .space 4
-	teste: .asciiz "dfaijdfoaij"
-	prompt2: .asciiz " "
-	prompt3: .asciiz " O vetor de posicao esta na seguinte configuracao: "
-	prompt1: .asciiz "O vetor de estado esta na seguinte configuracao: "
-	passou: .asciiz " Passou aqui... "
-
