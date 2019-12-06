@@ -1,3 +1,4 @@
+ 
 .text
 	.globl Inicio
 	
@@ -10,7 +11,27 @@
 		syscall
 	
 	Comecar_jogo:	
-					
+ li $t2, 40  #MIDI instrumento 
+  move $a2, $t2
+  li $a0, 71   # tom C D E F G A B
+  li $a1, 500  # segundo
+  li $a3, 70  #volume m�ximo
+  la $v0, 31   #Fun��o som sem sleep.
+  syscall  
+  li $t2, 40  #MIDI instrumento 
+  move $a2, $t2
+  li $a0, 72   #
+  li $a1, 800  # segundo
+  li $a3, 127  #volume m�ximo
+  la $v0, 31   #Fun��o som sem sleep.
+   syscall  
+  li $t2, 40  #MIDI instrumento 
+  move $a2, $t2
+  li $a0, 74    #
+  li $a1, 1000  # 1 segundo
+  li $a3, 127  #volume m�ximo
+  la $v0, 33   #Fun��o som sem sleep.
+   syscall      			
 									
 		li $s6,0 ## Pontuação Inicial	
 		li $s3,3 #quantidade de vidas
@@ -111,6 +132,14 @@
 	Perdeu:
 		addi $sp,$sp,-4
 		sw $t0,0($sp)
+		
+		  li $t7, 120  #MIDI instrumento 
+  move $a2, $t7
+  li $a0, 62   #
+  li $a1, 500  # segundo
+  li $a3, 127  #volume m�ximo
+  la $v0, 31   #Fun��o som sem sleep.
+   syscall  
 		
 		subi $s3,$s3,1
 		slt $t0,$zero,$s3
@@ -224,6 +253,14 @@
 		subi $s4,$s4,1 ## Deixa mais rapido as frutas
 		nao_muda_tempo:
 		addi $s6,$s6,10
+		
+		  li $t7, 40  #MIDI instrumento 
+  move $a2, $t7
+  li $a0, 72   #
+  li $a1, 800  # segundo
+  li $a3, 127  #volume m�ximo
+  la $v0, 31   #Fun��o som sem sleep.
+   syscall  
 		
 		cont1_loop_confcesta:
 		addi $t0,$t0,1
