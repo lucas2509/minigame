@@ -2,20 +2,21 @@
 	.globl Inicio
 	
 	Inicio: #display em 4,2,512,512		
-		li $s6,0 ## Pontuação Inicial		
 		
-		li $s2,0x223399 ## Cor de fundo
-		jal Apagar_tela
-		
+				
 		la $a0,bem_vindo
 		li $a1,1
 		li $v0,55
 		syscall
 	
-	Comcecar_jogo:		
-		
+	Comecar_jogo:
+					
+		li $s6,0 ## Pontuação Inicial	
 		li $s3,3 #quantidade de vidas
 		li $s4,25 #Velocidade do jogo
+		
+		li $s2,0x223399 ## Cor de fundo
+		jal Apagar_tela
 		
 		li $k0,100100
 		li $v1,1
@@ -109,8 +110,16 @@
 		move $a1,$s6
 		li $v0,56
 		syscall
+		
+		la $a0,jogar_novamente
+		li $v0,50
+		syscall
+		
+		beq $a0,$zero,Comecar_jogo
+		
 		addi $v0,$zero,10 
-		syscall		
+		syscall	
+			
 		
 		fim_perdeu:
 		lw $t0,0($sp)
@@ -3127,4 +3136,5 @@
 	vetor_pos: .space 40
 	vetor_estado: .space 40
 	bem_vindo: .asciiz "## Jogo da cesta ## \nVocê pode deixar até 3 frutas cairem no chao!"
+	jogar_novamente: .asciiz "Deseja jogar novamente?"
 	terminou: .asciiz "O jogo terminou, sua pontuação foi "
