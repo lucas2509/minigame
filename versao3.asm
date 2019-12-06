@@ -9,8 +9,9 @@
 		li $v0,55
 		syscall
 	
-	Comecar_jogo:
+	Comecar_jogo:	
 					
+									
 		li $s6,0 ## Pontuação Inicial	
 		li $s3,3 #quantidade de vidas
 		li $s4,25 #Velocidade do jogo
@@ -56,6 +57,15 @@
 		sw $t1,4($sp)
 		
 		jal Controle_teclado
+		
+		li $v0,432
+		jal Pintar_nuvem
+		li $v0,50240
+		jal Pintar_nuvem
+		li $v0,24808
+		jal Pintar_nuvem
+		
+		
 		li $v1,1
 		jal Pintar_boneca
 		jal Confronto_cesta
@@ -437,6 +447,23 @@
 		lw $ra,0($sp)
 		addi $sp,$sp,4
 		jr  $ra
+        #########################################
+        Montar_chao:
+        	li $t0,0xffffff
+        	move $t1,$gp
+        	addi $t1,$t1,109568
+		addi $t2,$t1,131072
+		
+		loop_montachao:
+		slt $t3,$t1,$t2
+		beq $t3,$zero,desvia_loop_montachao
+		sw $t0,0($t1)
+		addi $t1,$t1,4
+		j loop_montachao
+		desvia_loop_montachao:		
+		
+		jr $ra
+        
         #########################################
 	Apagar_tela:
 		
@@ -2017,7 +2044,103 @@
 	lw $t7,28($sp)
 	addi $sp,$sp,32
 	jr $ra
+	
         #########################
+        ####### Pintar Nuvem ############
+        Pintar_nuvem:
+        addi $sp,$sp,-4
+        sw $s6,0($sp)
+        
+        add $s0,$gp,$v0
+        addi $s0,$s0,-42000
+        li $s6,0xffffff #azul olhos
+        
+        sw $s6,64212($s0)
+	sw $s6,64216($s0)
+	sw $s6,64220($s0)
+	sw $s6,64232($s0)
+	sw $s6,64236($s0)
+	sw $s6,64240($s0)
+	sw $s6,64244($s0)
+	sw $s6,64688($s0)
+	sw $s6,64692($s0)
+	sw $s6,64696($s0)
+	sw $s6,64700($s0)
+	sw $s6,64704($s0)
+	sw $s6,64720($s0)
+	sw $s6,64736($s0)
+	sw $s6,64740($s0)
+	sw $s6,64756($s0)
+	sw $s6,65196($s0)
+	sw $s6,65220($s0)
+	sw $s6,65224($s0)
+	sw $s6,65232($s0)
+	sw $s6,65260($s0)
+	sw $s6,65264($s0)
+	sw $s6,65704($s0)
+	sw $s6,65740($s0)
+	sw $s6,65768($s0)
+	sw $s6,66212($s0)
+	sw $s6,66256($s0)
+	sw $s6,66724($s0)
+	sw $s6,66760($s0)
+	sw $s6,66772($s0)
+	sw $s6,67232($s0)
+	sw $s6,67272($s0)
+	sw $s6,67284($s0)
+	sw $s6,67788($s0)
+	sw $s6,67792($s0)
+	sw $s6,67740($s0)
+	sw $s6,68252($s0)
+	sw $s6,68764($s0)
+	sw $s6,69276($s0)
+	sw $s6,69788($s0)
+	sw $s6,66276($s0)
+	sw $s6,66788($s0)
+	sw $s6,67300($s0)
+	sw $s6,67812($s0)
+	sw $s6,68324($s0)
+	sw $s6,68836($s0)
+	sw $s6,69348($s0)
+	sw $s6,69860($s0)
+	sw $s6,70372($s0)
+	sw $s6,68788($s0)
+	sw $s6,68792($s0)
+	sw $s6,68796($s0)
+	sw $s6,69296($s0)
+	sw $s6,69808($s0)
+	sw $s6,70304($s0)
+	sw $s6,70324($s0)
+	sw $s6,69296($s0)
+	sw $s6,69808($s0)
+	sw $s6,69312($s0)
+	sw $s6,69824($s0)
+	sw $s6,70336($s0)
+	sw $s6,70848($s0)
+	sw $s6,70324($s0)
+	sw $s6,70820($s0)
+	sw $s6,71332($s0)
+	sw $s6,71356($s0)
+	sw $s6,71372($s0)
+	sw $s6,71376($s0)
+	sw $s6,71392($s0)
+	sw $s6,71848($s0)
+	sw $s6,71852($s0)
+	sw $s6,71856($s0)
+	sw $s6,71860($s0)
+	sw $s6,71864($s0)
+	sw $s6,71880($s0)
+	sw $s6,71892($s0)
+	sw $s6,71900($s0)
+	sw $s6,72380($s0)
+	sw $s6,72384($s0)
+	sw $s6,72388($s0)
+	sw $s6,72408($s0)
+	sw $s6,70880($s0)
+	
+	lw $s6,0($sp)
+	addi $sp,$sp,4
+	jr $ra
         ####### Pintar_boneca ###########
         	
         Pintar_boneca:      	
