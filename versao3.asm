@@ -8,9 +8,8 @@
 		
 		
 		
-		li $t0,100000
-		la $t1,posicao_cesta
-		sw $t0,0($t1)
+		
+		li $k0,100000
 		
 		li $v1,1
 		jal Pintar_boneca
@@ -98,10 +97,9 @@
 		bne $t0,$t2,cont1_controle
 		li $v1,0
 		jal Pintar_boneca
-		la $t0,posicao_cesta
-		lw $t1,0($t0)
-		addi $t1,$t1,-4
-		sw $t1,0($t0)
+		la $t0,posicao_cesta		
+		addi $k0,$k0,-8
+		
 		
 		li $t0,0xffff0004
 		li $t1,0
@@ -111,11 +109,8 @@
 		li $t0,100
 		bne $t0,$t2,cont2_controle
 		li $v1,0
-		jal Pintar_boneca
-		la $t0,posicao_cesta
-		lw $t1,0($t0)
-		addi $t1,$t1,4
-		sw $t1,0($t0)
+		jal Pintar_boneca		
+		addi $k0,$k0,8
 		
 		li $t0,0xffff0004
 		li $t1,0
@@ -1985,9 +1980,8 @@
 	move $s5,$s2
 
 	cont1_pintar_boneca:
-	la $s0,posicao_cesta
-	lw $s0,0($s0)	
-	add $s0,$gp,$s0 #Atribui ao registrador $s0 o endereco do pixel central da maca
+	
+	add $s0,$gp,$k0 #Atribui ao registrador $s0 o endereco do pixel central da maca
 	addi $s0,$s0,-6168
 	
 
@@ -3028,6 +3022,8 @@
 	addi $sp,$sp,68
 	jr $ra
 ########################################
+        
+        
         
 	.data
 	espaco_display: .space 99232
