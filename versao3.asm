@@ -1,11 +1,18 @@
-
 .text
 	.globl Inicio
 	
 	Inicio: #display em 4,2,512,512		
+		li $s6,0 ## Pontuação Inicial		
 		
 		li $s2,0x223399 ## Cor de fundo
-		jal Apagar_tela		
+		jal Apagar_tela
+		
+		la $a0,bem_vindo
+		li $a1,1
+		li $v0,55
+		syscall
+	
+	Comcecar_jogo:		
 		
 		li $s3,3 #quantidade de vidas
 		li $s4,25 #Velocidade do jogo
@@ -91,13 +98,23 @@
 	#######################################
 	######## Funcao Perdeu !!! ###########
 	Perdeu:
-		subi $s3,$s3,1
-		bne $s3,$zero,fim_perdeu
+		addi $sp,$sp,-4
+		sw $t0,0($sp)
 		
-		addi $v0,$zero,10 
+		subi $s3,$s3,1
+		slt $t0,$zero,$s3
+		bne $t0,$zero,fim_perdeu
+		
+		la $a0,terminou
+		move $a1,$s6
+		li $v0,56
 		syscall
+		addi $v0,$zero,10 
+		syscall		
 		
 		fim_perdeu:
+		lw $t0,0($sp)
+		addi $sp,$sp,4
 		jr $ra
 	######################################	
 	Controle_teclado:
@@ -174,12 +191,20 @@
 		
 		lw $t4,0($t2)
 		li $t6,4
-		bne $t4,$t6,cont2_loop_confcesta
+		bne $t4,$t6,cont2_loop_confcesta		
+		
+		subi $s3,$s3,3
 		jal Perdeu
 		cont2_loop_confcesta:
 		li $t4,0
 		sw $t4,0($t2)
-		subi $s4,$s4,1
+		
+		li $t4,2
+		slt $t4,$t4,$s4
+		beq $t4,$zero,nao_muda_tempo
+		subi $s4,$s4,1 ## Deixa mais rapido as frutas
+		nao_muda_tempo:
+		addi $s6,$s6,10
 		
 		cont1_loop_confcesta:
 		addi $t0,$t0,1
@@ -3101,3 +3126,5 @@
 	espaco_display: .space 99232
 	vetor_pos: .space 40
 	vetor_estado: .space 40
+	bem_vindo: .asciiz "## Jogo da cesta ## \nVocê pode deixar até 3 frutas cairem no chao!"
+	terminou: .asciiz "O jogo terminou, sua pontuação foi "
