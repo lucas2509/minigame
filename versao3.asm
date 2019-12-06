@@ -179,7 +179,7 @@
 		cont2_loop_confcesta:
 		li $t4,0
 		sw $t4,0($t2)
-		subi $s4,$s4,2
+		subi $s4,$s4,1
 		
 		cont1_loop_confcesta:
 		addi $t0,$t0,1
